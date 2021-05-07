@@ -9,5 +9,5 @@ Gem::Specification.new do |s|
     s.homepage    =
       'https://rubygems.org/gems/hola'
     s.license       = 'MIT'
-    s.add_runtime_dependency 'cinch', '2.4.3' 
+    s.add_runtime_dependency 'cinch', '2.3.4' 
   end

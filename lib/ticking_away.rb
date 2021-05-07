@@ -12,5 +12,7 @@ class TickingAway
                 m.reply "Hello, #{m.user.nick}"
             end
         end
+
+        bot.start
     end
 end
