@@ -15,7 +15,7 @@ module TickingAway
       end
 
       def handle_response(response, request_url)
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.body.nil? || response.body.empty? ? {} : JSON.parse(response.body)
 
         case response.code
         when 200

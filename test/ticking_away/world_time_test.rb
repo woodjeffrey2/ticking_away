@@ -32,6 +32,26 @@ class TickingAway::WorldTimeTest < TickingAwayTest
 
     api_response = TickingAway::WorldTime.time_at(@base_url, @tz_info)
 
-    assert api_response.eql?(@success_response)
+    assert_equal(api_response, @success_response)
+  end
+
+  def test_not_found
+    stub_request(:any, @request_url)
+      .to_return(body: { error: 'unknown location' }.to_json, status: 404)
+
+    exception = assert_raises RuntimeError do
+      TickingAway::WorldTime.time_at(@base_url, @tz_info)
+    end
+    assert_equal('Error: 404 response for https://some_time_server.org/timezone/America/Los_Angeles', exception.message)
+  end
+
+  def test_bad_response
+    stub_request(:any, @request_url)
+      .to_return(body: nil, status: 500)
+
+    exception = assert_raises RuntimeError do
+      TickingAway::WorldTime.time_at(@base_url, @tz_info)
+    end
+    assert_equal('Error: 500 {}', exception.message)
   end
 end
