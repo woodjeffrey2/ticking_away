@@ -1,18 +1,3 @@
-require 'cinch'
+require 'ticking_away/chat_bot'
+require 'ticking_away/cinch/plugins/time_info'
 
-class TickingAway
-    def self.start(server, channels)
-        bot = Cinch::Bot.new do
-            configure do |c|
-                c.server = server
-                c.channels = channels
-            end
-            
-            on :message, "hello" do |m|
-                m.reply "Hello, #{m.user.nick}"
-            end
-        end
-
-        bot.start
-    end
-end
