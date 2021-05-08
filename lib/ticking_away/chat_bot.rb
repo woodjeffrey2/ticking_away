@@ -4,7 +4,7 @@ module TickingAway
   class ChatBot
 
     def initialize(server, channels)
-      @server = server  
+      @server = server
       @channels = channels
       @bot = nil
     end
@@ -13,13 +13,14 @@ module TickingAway
       # Scope nonsense
       server = @server
       channels = @channels
+
       @bot = Cinch::Bot.new do
-          configure do |c|
-              c.server = server
-              c.channels = channels
-              c.nick = 'TickingAway'
-              c.plugins.plugins = [TimeInfo]
-          end
+        configure do |c|
+          c.server = server
+          c.channels = channels
+          c.nick = 'TickingAwayBot'
+          c.plugins.plugins = [TimeInfo]
+        end
       end
 
       @bot.start

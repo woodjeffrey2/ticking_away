@@ -13,11 +13,11 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.7.0'
 
   s.add_runtime_dependency 'cinch', '2.3.4'
-  s.add_runtime_dependency 'httparty', '>= 0.17.0'
+  s.add_runtime_dependency 'httparty', '~> 0.17.0'
 
-  s.add_development_dependency 'minitest', '>= 5.0'
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'pry-byebug'
-  s.add_development_dependency 'webmock', '>= 3.0.0'
+  s.add_development_dependency 'minitest', '~> 5.0'
+  s.add_development_dependency 'pry', '~> 0.14.0'
+  s.add_development_dependency 'pry-byebug', '~> 3.9.0'
+  s.add_development_dependency 'webmock', '~> 3.0.0'
 
 end
