@@ -1,11 +1,11 @@
 require 'cinch'
 
 class TimeInfo
-    include Cinch::Plugin
+  include Cinch::Plugin
 
-    match 'timeat', :method => :time_check
+  match 'timeat', :method => :time_check
 
-    def time_check(msg)
-        msg.reply "Current time is: #{Time.now}"
-    end
+  def time_check(msg)
+    msg.reply "Current time is: #{Time.now}"
+  end
 end

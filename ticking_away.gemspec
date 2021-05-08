@@ -8,8 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Jeff Wood"]
   s.email       = 'woodjeffrey2@gmail.com'
   s.files       = Dir['lib/**/*']
-  s.homepage    =
-    'https://github.com/woodjeffrey2/ticking_away'
-  s.license       = 'MIT'
+  s.homepage    = 'https://github.com/woodjeffrey2/ticking_away'
+  s.license     = 'MIT'
   s.add_runtime_dependency 'cinch', '2.3.4' 
 end
