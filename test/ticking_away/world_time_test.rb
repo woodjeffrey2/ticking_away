@@ -42,7 +42,7 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     exception = assert_raises TickingAway::Errors::UnrecognizedTimeZone do
       TickingAway::WorldTime.time_at(@base_url, @tz_info)
     end
-    assert_equal('Error: 404 response for https://some_time_server.org/timezone/America/Los_Angeles', exception.message)
+    assert_equal('Error: Unrecognized Time Zone https://some_time_server.org/timezone/America/Los_Angeles', exception.message)
   end
 
   def test_bad_response
