@@ -3,6 +3,10 @@ require 'httparty'
 module TickingAway
   # Class to get time from the World Time Api or another Api with the same spec
   class WorldTime
+    UNKNOWN_TIME_ZONE_RESPONSE = {
+      'error' => 'unknown location'
+    }.freeze
+
     class << self
       def time_at(base_url, tz_info)
         request_url = "#{base_url}/timezone/#{tz_info}"
@@ -20,9 +24,13 @@ module TickingAway
 
         case response.code
         when 200
-          puts "Event: Successfully retreived current time for #{parsed_response['timezone']}: #{parsed_response['datetime']}"
+          puts "Event: Retreived current time for #{parsed_response['timezone']}: #{parsed_response['datetime']}"
         when 404
-          raise TickingAway::Errors::UnrecognizedTimeZone, "Error: 404 response for #{request_url}"
+          if parsed_response.eql?(UNKNOWN_TIME_ZONE_RESPONSE)
+            raise TickingAway::Errors::UnrecognizedTimeZone, "Error: Unrecognized Time Zone #{request_url}"
+          else
+            raise TickingAway::Errors::UrlNotFound, "Error: 404 response for #{request_url}"
+          end
         else
           raise "Error: #{response.code} #{parsed_response}"
         end
