@@ -39,7 +39,7 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     stub_request(:any, @request_url)
       .to_return(body: { error: 'unknown location' }.to_json, status: 404)
 
-    exception = assert_raises RuntimeError do
+    exception = assert_raises TickingAway::Errors::UnrecognizedTimeZone do
       TickingAway::WorldTime.time_at(@base_url, @tz_info)
     end
     assert_equal('Error: 404 response for https://some_time_server.org/timezone/America/Los_Angeles', exception.message)

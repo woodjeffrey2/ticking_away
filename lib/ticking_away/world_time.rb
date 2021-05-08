@@ -15,13 +15,14 @@ module TickingAway
       end
 
       def handle_response(response, request_url)
+        # Convert JSON response to Hash, handling an empty or nil body
         parsed_response = response.body.nil? || response.body.empty? ? {} : JSON.parse(response.body)
 
         case response.code
         when 200
           puts "Event: Successfully retreived current time for #{parsed_response['timezone']}: #{parsed_response['datetime']}"
         when 404
-          raise "Error: 404 response for #{request_url}"
+          raise TickingAway::Errors::UnrecognizedTimeZone, "Error: 404 response for #{request_url}"
         else
           raise "Error: #{response.code} #{parsed_response}"
         end
