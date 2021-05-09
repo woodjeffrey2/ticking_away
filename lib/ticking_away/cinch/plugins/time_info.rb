@@ -52,8 +52,8 @@ module TickingAway
   class TimeInfo
     include ::Cinch::Plugin
 
-    match /timeat */, method: :timeat
-    match /timepopularity */, method: :timepopularity
+    match (/timeat */), method: :timeat
+    match (/timepopularity */), method: :timepopularity
 
     listen_to :connect, method: :on_connect
 
