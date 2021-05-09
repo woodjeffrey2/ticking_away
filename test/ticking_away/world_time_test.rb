@@ -10,18 +10,18 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     @success_response = {
       'abbreviation' => 'PDT',
       'client_ip' => '24.22.121.72',
-      'datetime' => '2021-05-08T10 =>25 =>32.321735-07 =>00',
+      'datetime' => '2021-05-08T10:25:32.321735-07:00',
       'day_of_week' => 6,
       'day_of_year' => 128,
       'dst' => true,
-      'dst_from' => '2021-03-14T10 =>00 =>00+00 =>00',
+      'dst_from' => '2021-03-14T10:00:00+00:00',
       'dst_offset' => 3600,
-      'dst_until' => '2021-11-07T09 =>00 =>00+00 =>00',
+      'dst_until' => '2021-11-07T09:00:00+00:00',
       'raw_offset' => -28800,
       'timezone' => 'America/Los_Angeles',
       'unixtime' => 1620494732,
-      'utc_datetime' => '2021-05-08T17 =>25 =>32.321735+00 =>00',
-      'utc_offset' => '-07 =>00',
+      'utc_datetime' => '2021-05-08T17:25:32.321735+00:00',
+      'utc_offset' => '-07:00',
       'week_number' => 18
     }
   end

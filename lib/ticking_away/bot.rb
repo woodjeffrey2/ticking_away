@@ -24,11 +24,13 @@ module TickingAway
     # Only !timeat <tz_info> and !timepopularity <tz_info or prefix>
     # commands will return a string response
     def chat(msg)
-      case msg.partition(' ')[0]
+      message = strip_username(msg)
+
+      case message.partition(' ')[0]
       when TIMEAT_CMD.strip
-        time_check(msg)
+        time_check(message)
       when TIMEPOPULARITY_CMD.strip
-        stat_check(msg)
+        stat_check(message)
       end
     end
 
@@ -48,6 +50,12 @@ module TickingAway
     end
 
     private
+
+    def strip_username(msg)
+      return msg unless msg.include?(':')
+
+      msg.partition(':')[2].strip
+    end
 
     # Parse the message for the string after the command.
     # Requires the command length (including the ! and space)
