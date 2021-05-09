@@ -48,19 +48,26 @@ class TickingAway::BotTest < TickingAwayTest
     assert_equal(saved_stats, expected_stats)
   end
 
-  # def test_get_stat
-  #   stat_name = 'America/Los_Angeles'
+  def test_chat_timepopularity
+    @storage.stats = {}
+    tz_info = 'America/Los_Angeles'
+    test_at_cmd = "!timeat #{tz_info}"
+    test_pop_cmd = "!timepopularity #{tz_info}"
 
-  #   @storage.increment_stat(stat_name)
-  #   @storage.increment_stat("#{stat_name}/Taco_Bell")
-  #   @storage.increment_stat("#{stat_name}/Pizza_Hut")
+    stub_request(:any, "#{@bot.time_api}/timezone/#{tz_info}")
+      .to_return(body: @success_response.to_json, status: 200)
+    stub_request(:any, "#{@bot.time_api}/timezone/#{tz_info}/Taco_Bell")
+      .to_return(body: @success_response.to_json, status: 200)
 
-  #   actual = @storage.get_stat(stat_name)
-  #   expected = 3
-  #   assert_equal(actual, expected)
-  #   clear_file
-  # end
+    @bot.chat(test_at_cmd)
+    @bot.chat(test_at_cmd)
+    @bot.chat("#{test_at_cmd}/Taco_Bell")
 
+    saved_stat = @bot.chat(test_pop_cmd)
+    expected_stat = 3
+
+    assert_equal(saved_stat, expected_stat)
+  end
 end
 
 def clear_file

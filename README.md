@@ -11,6 +11,8 @@ Disclaimer: The Cinch library has been dead for several years but still seems to
 
 ## Installation
 
+Requirements: Ruby 2.7 and Bundler
+
 RubyGems:
 
 ```sh
