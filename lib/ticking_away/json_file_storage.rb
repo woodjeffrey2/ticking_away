@@ -24,11 +24,12 @@ module TickingAway
       File.write(filename, JSON.dump(stats))
     end
 
+    # Get the number of times !timeat was called for a
+    # timezone or prefix. Partial prefix matches count towards
+    # the total.
     def get_stat(stat_name)
-      saved_stats = JSON.parse(read_file)
-
       call_count = 0
-      saved_stats.each do |key, value|
+      stats.each do |key, value|
         call_count += value if key.start_with?(stat_name)
       end
 

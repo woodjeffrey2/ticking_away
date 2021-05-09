@@ -1,4 +1,5 @@
 require 'httparty'
+require 'time'
 
 module TickingAway
   # Class to get time from the World Time Api or another Api with the same spec
@@ -29,14 +30,16 @@ module TickingAway
           # Differentiate between an unknown time zone and a random 404
           if parsed_response.eql?(UNKNOWN_TIME_ZONE_RESPONSE)
             raise TickingAway::Errors::UnrecognizedTimeZone, "Error: Unrecognized Time Zone #{request_url}"
-          else
-            raise TickingAway::Errors::UrlNotFound, "Error: 404 response for #{request_url}"
           end
+
+          raise TickingAway::Errors::UrlNotFound, "Error: 404 response for #{request_url}"
         else
           raise "Error: #{response.code} #{parsed_response}"
         end
 
-        parsed_response
+        time_string = parsed_response['datetime']
+        # DateTime.strptime(time_string.gsub(' =>', ''), "%FT%T.%6N%:z")
+        Time.parse(time_string)
       end
     end
   end
