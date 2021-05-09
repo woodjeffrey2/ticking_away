@@ -31,8 +31,9 @@ class TickingAway::WorldTimeTest < TickingAwayTest
       .to_return(body: @success_response.to_json, status: 200)
 
     api_response = TickingAway::WorldTime.time_at(@base_url, @tz_info)
+    expected_response = Time.parse(@success_response['datetime'])
 
-    assert_equal(api_response, @success_response)
+    assert_equal(api_response, expected_response)
   end
 
   def test_not_found

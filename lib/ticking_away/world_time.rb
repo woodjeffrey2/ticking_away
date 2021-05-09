@@ -5,10 +5,11 @@ require 'json'
 module TickingAway
   # Class to get time from the World Time Api or another Api with the same spec
   class WorldTime
-    UNKNOWN_TIME_ZONE_RESPONSE = {
+    UNKNOWN_LOCATION_RESPONSE = {
       'error' => 'unknown location'
     }.freeze
 
+    # Define methods as (kind of) Class methods since we don't need to store state
     class << self
       def time_at(base_url, tz_info)
         request_url = "#{base_url}/timezone/#{tz_info}"
@@ -28,19 +29,18 @@ module TickingAway
         when 200
           puts "Event: Retreived current time for #{parsed_response['timezone']}: #{parsed_response['datetime']}"
         when 404
-          # Differentiate between an unknown time zone and a random 404
-          if parsed_response.eql?(UNKNOWN_TIME_ZONE_RESPONSE)
+          # Differentiate between an unknown location response and a random 404 by checking the response body
+          if parsed_response.eql?(UNKNOWN_LOCATION_RESPONSE)
             raise TickingAway::Errors::UnrecognizedTimeZone, "Error: Unrecognized Time Zone #{request_url}"
           end
 
-          raise TickingAway::Errors::UrlNotFound, "Error: 404 response for #{request_url}"
+          raise TickingAway::Errors::ApiUrlNotFound, "Error: 404 response for #{request_url}"
         else
           raise "Error: #{response.code} #{parsed_response}"
         end
 
-        time_string = parsed_response['datetime']
-        # DateTime.strptime(time_string.gsub(' =>', ''), "%FT%T.%6N%:z")
-        Time.parse(time_string)
+        # Convert the time from a RFC3339 formatted string to a Time object
+        Time.parse(parsed_response['datetime'])
       end
     end
   end

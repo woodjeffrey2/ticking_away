@@ -1,5 +1,10 @@
 require 'cinch'
 
+# This provides a default Chat Bot for running
+# the TickingAway::TimeInfo Cinch plugin. A new
+# Chatbot can be started by calling
+# bot = TickingAway::ChatBot.new(<server>, <channel>)
+# bot.start
 module TickingAway
   class ChatBot
 
@@ -10,7 +15,14 @@ module TickingAway
     end
 
     def start
-      # Scope nonsense
+      # Required for dealing with scope.
+      # The block provided when instantiating the
+      # bot and the configuration block only have the
+      # scope of the start method while the start
+      # method has access to the class's instance vars
+      # The block cannot access the class's instance vars
+      # unless they're assigned to a var in the method's scope
+      # Good target for some refactoring
       server = @server
       channels = @channels
 

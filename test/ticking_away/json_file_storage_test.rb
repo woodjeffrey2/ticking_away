@@ -5,8 +5,8 @@ class TickingAway::JSONFileStorageTest < TickingAwayTest
 
   def setup
     @filename = 'some_test_file.json'
-    @storage = TickingAway::JSONFileStorage.new(@filename)
     clear_file
+    @storage = TickingAway::JSONFileStorage.new(@filename)
   end
 
   def test_increment_stat
@@ -33,8 +33,10 @@ class TickingAway::JSONFileStorageTest < TickingAwayTest
     assert_equal(actual, expected)
     clear_file
   end
+
+  def clear_file
+    File.delete(@filename) if File.file?(@filename)
+  end
 end
 
-def clear_file
-  File.delete(@filename) if File.file?(@filename)
-end
+

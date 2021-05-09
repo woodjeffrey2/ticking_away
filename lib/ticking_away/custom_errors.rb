@@ -1,6 +1,7 @@
 module TickingAway
   module Errors
+    # Custom Errors
     class UnrecognizedTimeZone < StandardError; end
-    class UrlNotFound < StandardError; end
+    class ApiUrlNotFound < StandardError; end
   end
 end
