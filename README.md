@@ -7,7 +7,6 @@ This gem can create an IRC Chat Bot using the [Cinch gem](https://github.com/cin
 
 Disclaimer: The Cinch library has been dead for several years but still seems to work just fine on freenode.
 
-![](header.png)
 
 ## Installation
 
@@ -77,6 +76,7 @@ bot = Cinch::Bot.new do
 
 bot.start
 ```
+Example files are provided in the `/examples` directory
 
 ## Building the gem locally
 
