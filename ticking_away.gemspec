@@ -3,7 +3,7 @@ $LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = 'ticking_away'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.summary     = 'IRC Chat Bot for time shenanigans'
   s.authors     = ['Jeff Wood']
   s.email       = 'woodjeffrey2@gmail.com'
