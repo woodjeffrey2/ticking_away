@@ -31,7 +31,7 @@
 # Jeff Wood
 #
 # == License
-# A memo message plugin for Cinch.
+# A time info plugin for Cinch.
 # Copyright © 2021 Jeff Wood
 #
 # This program is free software: you can redistribute it and/or modify
@@ -52,71 +52,29 @@ module TickingAway
   class TimeInfo
     include ::Cinch::Plugin
 
-    DEFAULT_TIME_API = 'http://worldtimeapi.org/api'.freeze
-    EXCUSES = [
-      'Time is an illusion',
-      'What is time, really?',
-      'The linear progression of time is currently on hold'
-    ].freeze
-
-    match /timeat */, method: :time_check
-    match /timepopularity */, method: :stat_check
+    match /timeat */, method: :timeat
+    match /timepopularity */, method: :timepopularity
 
     listen_to :connect, method: :on_connect
 
-    # Instantiate JSON file storage when the bot connects
-    # to the IRC server. I'd like to eventually add some Dependency
-    # Injection for stat storage method
+    # Instantiate bot with JSON file storage when the bot connects
+    # to the IRC server. I'd like storage to be configurable
+    # through the Cinch configs eventually
     def on_connect(*)
-      @stat_file = TickingAway::JSONFileStorage.new
+      @storage = TickingAway::JSONFileStorage.new
+      @ta_bot = config[:time_api] ? TickingAway::Bot.new(@storage, config[:time_api]) : TickingAway::Bot.new(@storage)
     end
 
     # Check time for the timezone provided against the
-    # provided time api.
-    def time_check(msg)
-      tz_info = parse_message(msg, '!timeat '.length)
-
-      puts "Event: Checking Time for timezone: #{tz_info}"
-
-      msg.reply time_message(tz_info)
+    # provided time api by asking the TickingAway Bot
+    def timeat(msg)
+      msg.reply @ta_bot.time_check(msg.params[1])
     end
 
     # Return the statistic for the provided tz_info or prefix
-    def stat_check(msg)
-      msg.reply @stat_file.get_stat(parse_message(msg, '!timepopularity '.length))
-    end
-
-    private
-
-    # Parse the message for the string after the command.
-    # Requires the command length (including the ! and space)
-    # to know where to start the substring
-    def parse_message(msg, cmd_length)
-      message = msg.params[1]
-      message[cmd_length..message.length]
-    end
-
-    # Look for the time api in ENV, then Cinch::Plugin config
-    # Fall back to hardcoded worldtimeapi
-    def base_url
-      ENV['TIME_API'] || config[:time_api] || DEFAULT_TIME_API
-    end
-
-    # Generate the time message, returning "unknown location"
-    # for any unrecognized time zones and logging any uncaught
-    # errors before returning an excuse at random.
-    # Stats will only be incremented if the api call was successful
-    def time_message(tz_info)
-      time = TickingAway::WorldTime.time_at(base_url, tz_info)
-
-      @stat_file.increment_stat(tz_info)
-      time.strftime('%e %b %Y %H:%M')
-    rescue TickingAway::Errors::UnrecognizedTimeZone => e
-      puts e.message
-      'unknown timezone'
-    rescue => e
-      puts e.message
-      EXCUSES.sample
+    # by asking the TickingAway Bot
+    def timepopularity(msg)
+      msg.reply @ta_bot.stat_check(msg.params[1])
     end
   end
 end
