@@ -26,6 +26,7 @@ module TickingAway
         when 200
           puts "Event: Retreived current time for #{parsed_response['timezone']}: #{parsed_response['datetime']}"
         when 404
+          # Differentiate between an unknown time zone and a random 404
           if parsed_response.eql?(UNKNOWN_TIME_ZONE_RESPONSE)
             raise TickingAway::Errors::UnrecognizedTimeZone, "Error: Unrecognized Time Zone #{request_url}"
           else

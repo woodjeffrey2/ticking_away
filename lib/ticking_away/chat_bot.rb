@@ -19,7 +19,7 @@ module TickingAway
           c.server = server
           c.channels = channels
           c.nick = 'TickingAwayBot'
-          c.plugins.plugins = [TimeInfo]
+          c.plugins.plugins = [TickingAway::TimeInfo]
         end
       end
 

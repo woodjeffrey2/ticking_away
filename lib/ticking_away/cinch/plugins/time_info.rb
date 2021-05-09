@@ -1,7 +1,10 @@
 require 'cinch'
 
+module TickingAway
+# Class to add !timeat and !timepopularity commands
+# to a Cinch IRC chat bot
 class TimeInfo
-  include Cinch::Plugin
+  include ::Cinch::Plugin
 
   DEFAULT_TIME_API = 'http://worldtimeapi.org/api'.freeze
   EXCUSES = [
@@ -10,29 +13,42 @@ class TimeInfo
     'The linear progression of time is currently on hold'
   ].freeze
 
-  match %r{timeat */*}, method: :time_check
-  match 'hello', method: :hello
+  match /timeat */, method: :time_check
+  match /timepopularity */, method: :stat_check
+
+  listen_to :connect, method: :on_connect
+
+  def on_connect(*)
+    @stat_file = TickingAway::JSONFileStorage.new
+  end
 
   def time_check(msg)
-    # Parse the message for the timezone
-    msg_cmd = msg.params[1]
-    tz_info = msg_cmd[8..msg_cmd.length]
+    tz_info = parse_message(msg, 8)
 
     puts "Event: Checking Time for timezone: #{tz_info}"
 
+    @stat_file.increment_stat(tz_info)
     msg.reply time_message(tz_info)
   end
 
-  def hello(msg)
-    msg.reply "Hello to you! My current time is #{Time.now}"
+  def stat_check(msg)
+    msg.reply @stat_file.get_stat(parse_message(msg, 16))
+  end
+
+  private
+
+  def parse_message(msg, cmd_length)
+    message = msg.params[1]
+    message[cmd_length..message.length]
   end
 
   def base_url
-    ENV['TICKINGAWAY_BASE_URL'] || DEFAULT_TIME_API
+    ENV['TIME_API'] || DEFAULT_TIME_API
   end
 
   def time_message(tz_info)
     time = TickingAway::WorldTime.time_at(base_url, tz_info)
+
     "Current time is: #{time['datetime']}"
   rescue TickingAway::Errors::UnrecognizedTimeZone => e
     puts e.message
@@ -41,4 +57,5 @@ class TimeInfo
     puts e.message
     EXCUSES.sample
   end
+end
 end
