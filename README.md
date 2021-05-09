@@ -46,14 +46,18 @@ bot.start
 ```
 
 ### Bot Object
-You can also just create a `TickingAway::Bot` and send commands at it through the `chat(<message>)` method. Messages should be formatted in IRC format like `<username>: <command or message>`
+You can also just create a `TickingAway::Bot` and send commands at it through the `chat(<message>)` method. Messages should either be formatted in IRC format like `<username>: <command or message>` or just `<command or message>`
 
 ```ruby
 require 'ticking_away'
 
 bot = TickingAway::Bot.new
 
+# "<username>: " is optional. It should work the same with or without a username specified
+# bot_response = bot.chat('!timeat America/Los_Angeles')
 bot_response = bot.chat('Jeremy: !timeat America/Los_Angeles')
+
+puts bot_response
 ```
 
 ### Cinch Plugin

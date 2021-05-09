@@ -20,7 +20,7 @@ module TickingAway
     end
 
     # Send a string to the Bot in the format of
-    # <user_name>: <message>
+    # <user_name>: <message> or just <message>
     # Only !timeat <tz_info> and !timepopularity <tz_info or prefix>
     # commands will return a string response
     def chat(msg)

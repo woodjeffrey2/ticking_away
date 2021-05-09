@@ -5,6 +5,8 @@ require 'ticking_away'
 # and the World Time Api (http://worldtimeapi.org/api)
 bot = TickingAway::Bot.new
 
+# "<username>: " is optional. It should work the same with or without a username specified
+# bot_response = bot.chat('!timeat America/Los_Angeles')
 bot_response = bot.chat('Jeremy: !timeat America/Los_Angeles')
 
 puts bot_response
