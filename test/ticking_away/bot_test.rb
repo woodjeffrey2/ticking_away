@@ -90,4 +90,48 @@ class TickingAway::BotTest < TickingAwayTest
 
     assert_equal(saved_stat, expected_stat)
   end
+
+  def test_chat_timeat_bad_timezone
+    @storage.stats = {}
+    tz_info = 'America/Los_Angelez'
+    test_cmd = "!timeat #{tz_info}"
+
+    stub_request(:any, "#{@bot.time_api}/timezone/#{tz_info}")
+      .to_return(body: { error: 'unknown location' }.to_json, status: 404)
+
+    response = @bot.chat(test_cmd)
+    expected_response = 'unknown timezone'
+
+    assert_equal(response, expected_response)
+
+    # make sure we're not storing bad lookups
+    saved_stats = @storage.stats
+    expected_stats = {}
+
+    assert_equal(saved_stats, expected_stats)
+  end
+
+  def test_chat_timeat_bad_status
+    @storage.stats = {}
+    tz_info = 'America/Los_Angeles'
+    test_cmd = "!timeat #{tz_info}"
+
+    stub_request(:any, "#{@bot.time_api}/timezone/#{tz_info}")
+      .to_return(body: nil, status: 503)
+
+    response = @bot.chat(test_cmd)
+    possible_responses = [
+      'Time is an illusion',
+      'What is time, really?',
+      'The linear progression of time is currently on hold'
+    ]
+
+    assert possible_responses.include?(response)
+
+    # make sure we're not storing bad lookups
+    saved_stats = @storage.stats
+    expected_stats = {}
+
+    assert_equal(saved_stats, expected_stats)
+  end
 end

@@ -64,7 +64,7 @@ module TickingAway
       msg[cmd_length..msg.length]
     end
 
-    # Generate the time message, returning "unknown location"
+    # Generate the time message, returning "unknown timezone"
     # for any unrecognized time zones and logging any uncaught
     # errors before returning an excuse at random.
     # Stats will only be incremented if the api call was successful
