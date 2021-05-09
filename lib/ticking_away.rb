@@ -1,18 +1,6 @@
-require 'cinch'
-
-class TickingAway
-    def self.start(server, channels)
-        bot = Cinch::Bot.new do
-            configure do |c|
-                c.server = server
-                c.channels = channels
-            end
-            
-            on :message, "hello" do |m|
-                m.reply "Hello, #{m.user.nick}"
-            end
-        end
-
-        bot.start
-    end
-end
+require 'ticking_away/chat_bot'
+require 'ticking_away/cinch/plugins/time_info'
+require 'ticking_away/world_time'
+require 'ticking_away/custom_errors'
+require 'ticking_away/json_file_storage'
+require 'ticking_away/bot'
