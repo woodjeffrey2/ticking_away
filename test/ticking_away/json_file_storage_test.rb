@@ -1,4 +1,5 @@
 require_relative '../ticking_away_test'
+require 'json'
 
 class TickingAway::JSONFileStorageTest < TickingAwayTest
 

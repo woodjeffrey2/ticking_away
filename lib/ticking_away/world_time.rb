@@ -1,5 +1,6 @@
 require 'httparty'
 require 'time'
+require 'json'
 
 module TickingAway
   # Class to get time from the World Time Api or another Api with the same spec
