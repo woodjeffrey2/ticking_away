@@ -4,24 +4,24 @@ module TickingAway
   # Class to store timeat stats as a JSON file in local storage
   class JSONFileStorage
     attr_reader :filename
+    attr_accessor :stats
 
     def initialize(filename = 'ticking_away_stats.json')
       @filename = filename
+      @stats = read_from_file
     end
 
     def increment_stat(stat_name)
-      if File.file?(filename)
-        saved_stats = JSON.parse(read_file)
-
-        if saved_stats[stat_name].nil?
-          File.write(filename, JSON.dump(saved_stats.merge({ stat_name => 1 })))
-        else
-          saved_stats[stat_name] += 1
-          File.write(filename, JSON.dump(saved_stats))
-        end
+      if stats[stat_name]
+        stats[stat_name] += 1
       else
-        File.write(filename, JSON.dump({ stat_name => 1 }))
+        stats.merge!({ stat_name => 1 })
       end
+      save_stats
+    end
+
+    def save_stats
+      File.write(filename, JSON.dump(stats))
     end
 
     def get_stat(stat_name)
@@ -37,6 +37,11 @@ module TickingAway
 
     def read_file
       File.read(filename)
+    end
+
+    def read_from_file
+      return JSON.parse(read_file) if File.file?(filename)
+      {}
     end
   end
 end

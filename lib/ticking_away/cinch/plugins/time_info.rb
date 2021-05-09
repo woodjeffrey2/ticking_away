@@ -1,7 +1,7 @@
 require 'cinch'
 
 module TickingAway
-# Class to add !timeat and !timepopularity commands
+# Plugin to add !timeat and !timepopularity commands
 # to a Cinch IRC chat bot
 class TimeInfo
   include ::Cinch::Plugin
