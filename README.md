@@ -73,7 +73,7 @@ bot = Cinch::Bot.new do
         end
       end
 
-@bot.start
+bot.start
 ```
 
 ## Building the gem locally

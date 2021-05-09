@@ -62,7 +62,7 @@ module TickingAway
     # through the Cinch configs eventually
     def on_connect(*)
       @storage = TickingAway::JSONFileStorage.new
-      @ta_bot = config[:time_api] ? TickingAway::Bot.new(@storage, config[:time_api]) : TickingAway::Bot.new(@storage)
+      @ta_bot = config[:time_api] ? TickingAway::Bot.new(storage: @storage, time_api: config[:time_api]) : TickingAway::Bot.new(storage: @storage)
     end
 
     # Check time for the timezone provided against the

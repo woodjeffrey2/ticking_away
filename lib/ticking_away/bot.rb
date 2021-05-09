@@ -14,7 +14,7 @@ module TickingAway
     # Allow the caller to pass in the storage method via
     # primitive DI. Other storage methods must implement
     # increment_stat(<tz_info>) and get_stat(<tz_info or prefix>)
-    def initialize(storage = nil, time_api = nil)
+    def initialize(storage: nil, time_api: nil)
       @storage = storage || TickingAway::JSONFileStorage.new
       @time_api = ENV['TIME_API'] || time_api || DEFAULT_TIME_API
     end

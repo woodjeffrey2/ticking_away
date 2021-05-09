@@ -7,7 +7,7 @@ class TickingAway::BotTest < TickingAwayTest
     @filename = 'some_test_file.json'
     @base_url = 'https://some_time_server.org'
     @storage = TickingAwayTest::MockStorage.new(@filename)
-    @bot = TickingAway::Bot.new(@storage, @base_url)
+    @bot = TickingAway::Bot.new(storage: @storage, time_api: @base_url)
 
     @success_response = {
       'abbreviation' => 'PDT',
