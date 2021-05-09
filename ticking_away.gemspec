@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'httparty', '~> 0.17.0'
 
   s.add_development_dependency 'minitest', '~> 5.0'
-  s.add_development_dependency 'pry', '~> 0.14.0'
+  s.add_development_dependency 'pry', '~> 0.13.0'
   s.add_development_dependency 'pry-byebug', '~> 3.9.0'
   s.add_development_dependency 'webmock', '~> 3.0.0'
 
