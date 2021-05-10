@@ -42,8 +42,9 @@ module TickingAway
   class TimeInfo
     include ::Cinch::Plugin
 
-    match (/timeat */), method: :timeat
-    match (/timepopularity */), method: :timepopularity
+    # regex needs work
+    match %r{timeat [a-zA-Z0-9_\-/]+}, method: :timeat
+    match %r{timepopularity [a-zA-Z0-9_\-/]+}, method: :timepopularity
 
     listen_to :connect, method: :on_connect
 
