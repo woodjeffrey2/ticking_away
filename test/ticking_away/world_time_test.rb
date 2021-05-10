@@ -55,7 +55,7 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     end
   end
 
-  def test_non_time_response
+  def test_array_response
     stub_request(:any, @request_url)
       .to_return(body: [1..5].to_json, status: 200)
 
@@ -63,5 +63,15 @@ class TickingAway::WorldTimeTest < TickingAwayTest
       TickingAway::WorldTime.time_at(@base_url, @tz_info)
     end
     assert_equal('Error: non-time response', exception.message)
+  end
+
+  def test_non_time_response
+    stub_request(:any, @request_url)
+      .to_return(body: '<html>asdfasdf</html>', status: 503)
+
+    exception = assert_raises TickingAway::Errors::TimeTravelIsHard do
+      TickingAway::WorldTime.time_at(@base_url, @tz_info)
+    end
+    assert_equal("809: unexpected token at '<html>asdfasdf</html>'", exception.message)
   end
 end
