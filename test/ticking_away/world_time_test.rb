@@ -50,9 +50,28 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     stub_request(:any, @request_url)
       .to_return(body: nil, status: 500)
 
-    exception = assert_raises RuntimeError do
+    assert_raises TickingAway::Errors::TimeTravelIsHard do
       TickingAway::WorldTime.time_at(@base_url, @tz_info)
     end
-    assert_equal('Error: 500 {}', exception.message)
+  end
+
+  def test_array_response
+    stub_request(:any, @request_url)
+      .to_return(body: [1..5].to_json, status: 200)
+
+    exception = assert_raises TickingAway::Errors::UnrecognizedTimeZone do
+      TickingAway::WorldTime.time_at(@base_url, @tz_info)
+    end
+    assert_equal('Error: non-time response', exception.message)
+  end
+
+  def test_non_time_response
+    stub_request(:any, @request_url)
+      .to_return(body: '<html>asdfasdf</html>', status: 503)
+
+    exception = assert_raises TickingAway::Errors::TimeTravelIsHard do
+      TickingAway::WorldTime.time_at(@base_url, @tz_info)
+    end
+    assert_equal("809: unexpected token at '<html>asdfasdf</html>'", exception.message)
   end
 end

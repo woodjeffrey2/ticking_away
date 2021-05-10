@@ -24,18 +24,20 @@ module TickingAway
     end
 
     # Get the number of times !timeat was called for a
-    # tz_info or prefix. Partial prefix matches count towards
-    # the total.
-    # If we didn't want them to, it could check the
-    # next char in the key after the .start_with? match. If it's outside the
-    # length or a "/", then the prefix or tz_info matches exactly
+    # tz_info or prefix. Partial prefix matches do not count.
     def get_stat(stat_name)
       call_count = 0
       stats.each do |key, value|
-        call_count += value if key.start_with?(stat_name)
+        call_count += value if key.start_with?(stat_name) && full_match?(stat_name, key)
       end
 
       call_count
+    end
+
+    def full_match?(stat_name, key)
+      return true if key.length == stat_name.length || key[stat_name.length] == '/'
+
+      false
     end
 
     def save_stats

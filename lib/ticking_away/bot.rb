@@ -76,7 +76,7 @@ module TickingAway
     rescue TickingAway::Errors::UnrecognizedTimeZone => e
       puts e.message
       'unknown timezone'
-    rescue => e
+    rescue TickingAway::Errors::TimeTravelIsHard => e
       puts e.message
       EXCUSES.sample
     end
