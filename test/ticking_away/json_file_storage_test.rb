@@ -34,6 +34,19 @@ class TickingAway::JSONFileStorageTest < TickingAwayTest
     clear_file
   end
 
+  def test_get_stat_no_partial
+    stat_name = 'America/Los_Angeles'
+
+    @storage.increment_stat(stat_name)
+    @storage.increment_stat("#{stat_name}/Taco_Bell")
+    @storage.increment_stat("#{stat_name}/Pizza_Hut")
+
+    actual = @storage.get_stat('Ameri')
+    expected = 0
+    assert_equal(actual, expected)
+    clear_file
+  end
+
   def clear_file
     File.delete(@filename) if File.file?(@filename)
   end

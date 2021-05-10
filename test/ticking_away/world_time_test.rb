@@ -50,7 +50,7 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     stub_request(:any, @request_url)
       .to_return(body: nil, status: 500)
 
-    exception = assert_raises TickingAway::Errors::TimeTravelIsHard do
+    assert_raises TickingAway::Errors::TimeTravelIsHard do
       TickingAway::WorldTime.time_at(@base_url, @tz_info)
     end
   end
