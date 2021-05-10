@@ -16,9 +16,12 @@ module TickingAway
 
         response = HTTParty.get(request_url)
         handle_response(response, request_url)
+      end
+
+      def call_api(request_url)
+        HTTParty.get(request_url)
       rescue => e
-        puts "Could not connect to time server #{request_url}"
-        raise e
+        raise e.extend(TickingAway::Errors::TimeTravelIsHard)
       end
 
       def handle_response(response, request_url)
@@ -34,9 +37,9 @@ module TickingAway
             raise TickingAway::Errors::UnrecognizedTimeZone, "Error: Unrecognized Time Zone #{request_url}"
           end
 
-          raise TickingAway::Errors::ApiUrlNotFound, "Error: 404 response for #{request_url}"
+          raise TickingAway::Errors::TimeTravelIsHard, "Error: 404 response for #{request_url}"
         else
-          raise "Error: #{response.code} #{parsed_response}"
+          raise TickingAway::Errors::TimeTravelIsHard, "Error: #{response.code} #{parsed_response}"
         end
 
         # Convert the time from a RFC3339 formatted string to a Time object

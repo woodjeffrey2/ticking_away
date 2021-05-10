@@ -1,6 +1,6 @@
 require 'ticking_away/chat_bot'
 require 'ticking_away/cinch/plugins/time_info'
 require 'ticking_away/world_time'
-require 'ticking_away/custom_errors'
+require 'ticking_away/errors'
 require 'ticking_away/json_file_storage'
 require 'ticking_away/bot'
