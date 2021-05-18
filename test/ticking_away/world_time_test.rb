@@ -50,7 +50,7 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     stub_request(:any, @request_url)
       .to_return(body: nil, status: 500)
 
-    assert_raises TickingAway::Errors::TimeTravelIsHard do
+    assert_raises TickingAway::Errors::Random5XX do
       TickingAway::WorldTime.time_at(@base_url, @tz_info)
     end
   end
@@ -69,7 +69,7 @@ class TickingAway::WorldTimeTest < TickingAwayTest
     stub_request(:any, @request_url)
       .to_return(body: '<html>asdfasdf</html>', status: 503)
 
-    exception = assert_raises TickingAway::Errors::TimeTravelIsHard do
+    exception = assert_raises TickingAway::Errors::Random5XX do
       TickingAway::WorldTime.time_at(@base_url, @tz_info)
     end
     assert_equal("809: unexpected token at '<html>asdfasdf</html>'", exception.message)

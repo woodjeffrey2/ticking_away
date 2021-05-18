@@ -4,6 +4,7 @@ require 'json'
 class TickingAway::BotTest < TickingAwayTest
 
   def setup
+    ENV['BACKOFF_BASE'] = '0.1' # use small backoff for faster tests
     @filename = 'some_test_file.json'
     @base_url = 'https://some_time_server.org'
     @storage = TickingAwayTest::MockStorage.new(@filename)
@@ -127,11 +128,23 @@ class TickingAway::BotTest < TickingAwayTest
     ]
 
     assert possible_responses.include?(response)
+  end
 
-    # make sure we're not storing bad lookups
-    saved_stats = @storage.stats
-    expected_stats = {}
+  def test_timeat_random_5XX
+    @storage.stats = {}
+    tz_info = 'America/Los_Angeles'
+    test_cmd = "!timeat #{tz_info}"
 
-    assert_equal(saved_stats, expected_stats)
+    stub_request(:any, "#{@bot.time_api}/timezone/#{tz_info}")
+      .to_return(body: nil, status: 503)
+
+    response = @bot.chat(test_cmd)
+    possible_responses = [
+      'Time is an illusion',
+      'What is time, really?',
+      'The linear progression of time is currently on hold'
+    ]
+
+    assert possible_responses.include?(response)
   end
 end

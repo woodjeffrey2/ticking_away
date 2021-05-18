@@ -51,7 +51,7 @@ module TickingAway
       def parse_response(body)
         JSON.parse(body)
       rescue => e
-        raise TickingAway::Errors::TimeTravelIsHard, e.message
+        raise TickingAway::Errors::Random5XX, e.message
       end
     end
   end

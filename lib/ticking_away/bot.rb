@@ -8,6 +8,7 @@ module TickingAway
       'What is time, really?',
       'The linear progression of time is currently on hold'
     ].freeze
+    MAX_RETRIES = 3
 
     attr_reader :storage, :time_api
 
@@ -17,6 +18,8 @@ module TickingAway
     def initialize(storage: nil, time_api: nil)
       @storage = storage || TickingAway::JSONFileStorage.new
       @time_api = ENV['TIME_API'] || time_api || DEFAULT_TIME_API
+      @retries = 0
+      @retry_timer = ENV['BACKOFF_BASE']&.to_f || 2
     end
 
     # Send a string to the Bot in the format of
@@ -37,6 +40,8 @@ module TickingAway
     # Check time for the timezone provided against the
     # provided time api.
     def time_check(msg)
+      @retries = 0
+
       tz_info = parse_message(msg, TIMEAT_CMD.length)
 
       puts "Event: Checking Time for timezone: #{tz_info}"
@@ -79,6 +84,14 @@ module TickingAway
     rescue TickingAway::Errors::TimeTravelIsHard => e
       puts e.message
       EXCUSES.sample
+    rescue TickingAway::Errors::Random5XX => e
+      if @retries <= MAX_RETRIES
+        @retries += 1
+        sleep @retry_timer**@retries
+        retry
+      else
+        EXCUSES.sample
+      end
     end
   end
 end
